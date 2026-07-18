@@ -1,15 +1,32 @@
 import React from 'react'
+import MyServerComponent from '../ui/MyServerComponent';
+import { getBlogs } from '../utils/getBlogs';
+import { cacheLife, cacheTag } from 'next/cache';
 
 const BlogsPage = async () => {
+    // "use cache"
+    // cacheLife("hours")
+    // cacheTag("posts")
 
-    const posts = await fetch("https://jsonplaceholder.typicode.com/posts")
 
-    const postData = await posts.json()
+    const blogs = await getBlogs();
 
-    console.log(postData);
+    console.log(blogs);
 
     return (
-        <div>Blogs Page</div>
+        <div>
+            {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                blogs.map((blog: any) => (
+                    // eslint-disable-next-line react/jsx-key
+                    <div>
+                        <h2>{blog.title}</h2>
+                    </div>
+                ))
+            }
+            Blogs Page
+            <MyServerComponent />
+        </div>
     )
 }
 
