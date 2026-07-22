@@ -36,7 +36,35 @@ const userMenuItems = [
     { label: 'Logout', icon: LogOut, id: 'logout', isDanger: true },
 ];
 
-export function Navbar() {
+type IUser = {
+    success: boolean;
+    message: string,
+    data: {
+        profile: {
+            name: string;
+            id: string;
+            email: string;
+            activeStatus: string;
+            role: string;
+            createdAt: string;
+            updatedAt: string;
+            profile: {
+                id: string;
+                profilePhoto: string | null;
+                bio: string | null;
+                userId: string;
+                createdAt: string;
+                updatedAt: string;
+            }
+        }
+    }
+}
+
+type NavbarProps = {
+    user: IUser;
+}
+
+export function Navbar({ user }: NavbarProps) {
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
 
@@ -136,15 +164,12 @@ export function Navbar() {
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" size="sm" className="gap-2">
-                                <div className="size-5 rounded-full bg-muted flex items-center justify-center text-xs font-semibold">
-                                    JD
-                                </div>
-                                <span className="hidden sm:inline">John Doe</span>
+                                <span className="">{user.data.profile.name || "Name"}</span>
                             </Button>
                         </DropdownMenuTrigger>
 
                         <DropdownMenuContent align="end" className="w-48">
-                            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                            <DropdownMenuLabel>{user.data.profile.email || "Email"}</DropdownMenuLabel>
                             <DropdownMenuSeparator />
 
                             {userMenuItems.map((item) => {
