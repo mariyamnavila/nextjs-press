@@ -1,7 +1,7 @@
 import "./globals.css";
 import { DM_Sans, Outfit } from "next/font/google";
 import { cn } from "@/lib/utils";
-import { Toaster } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 
 const outfitHeading = Outfit({ subsets: ['latin'], variable: '--font-heading' });
 
