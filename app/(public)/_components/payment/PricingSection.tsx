@@ -4,6 +4,7 @@ import { CheckIcon } from "lucide-react";
 import { SubscribeButton } from "./SubscribeButton";
 
 export function PricingSection() {
+
   const isActive = false;
 
   return (
@@ -11,7 +12,7 @@ export function PricingSection() {
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           Premium Plan
-          {isActive && <Badge>Active</Badge>}
+          {/* {isActive && <Badge>Active</Badge>} */}
         </CardTitle>
         <CardDescription>
           Unlock every premium story, cancel anytime.

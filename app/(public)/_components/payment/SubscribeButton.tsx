@@ -1,25 +1,23 @@
 "use client"
 
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
+import subscriptionPremium from "../../_actions/subscriptionPremium";
 
 export function SubscribeButton() {
-    const [pending, setPending] = useState(false);
+    const [state, action, pending] = useActionState(subscriptionPremium, null);
 
-    const handleSubscribe = (e: React.FormEvent) => {
-        e.preventDefault();
-        setPending(true);
-        const toastId = toast.loading("Redirecting to checkout...");
-        setTimeout(() => {
-            toast.dismiss(toastId);
-            toast.success("Subscribed successfully (Mock Sandbox Mode)!");
-            setPending(false);
-        }, 1500);
-    };
+    useEffect(() => {
+        if (!state) return;
+
+        if (!state.success) {
+            toast.error(state.message || "Failed to start checkout")
+        }
+    }, [state])
 
     return (
-        <form onSubmit={handleSubscribe}>
+        <form action={action}>
             <Button type="submit" disabled={pending} className="w-full">
                 {pending ? "Redirecting..." : "Subscribe Now"}
             </Button>
