@@ -32,9 +32,7 @@ export const getMe = async () => {
         }
     })
 
-    const result = res.json();
-
-    console.log(result);
+    const result = await res.json();
 
     return result
 }
