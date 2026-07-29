@@ -2,17 +2,35 @@
 import { cookies } from "next/headers";
 
 const getPremiumNews = async ({
-  query,
+    query,
 }: {
-  query?: { [key: string]: string | string[] | undefined }
-})=> {
-// bad approach
+    query?: { [key: string]: string | string[] | undefined }
+}) => {
+    // bad approach
     // const searchTerm = `${search?.searchTerm ? `?searchTerm=${search.searchTerm}` : ""}`
 
     const params = new URLSearchParams();
 
-    if (query&&query.searchTerm) {
-            params.set("searchTerm",query.searchTerm as string);
+    if (query?.searchTerm) {
+        params.set("searchTerm", query.searchTerm as string);
+    }
+    if (query?.sortBy) {
+        params.set("sortBy", query.sortBy as string);
+    }
+    if (query?.sortOrder) {
+        params.set("sortOrder", query.sortOrder as string);
+    }
+    if (query?.page) {
+        params.set("page", query.page as string);
+    }
+    if (query?.limit) {
+        params.set("limit", query.limit as string);
+    }
+    if (query?.tags) {
+        params.set("tags", query.tags as string);
+    }
+    if (query?.isFeatured) {
+        params.set("isFeatured", query.isFeatured as string);
     }
 
     const cookieStore = await cookies();

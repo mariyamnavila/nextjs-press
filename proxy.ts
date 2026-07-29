@@ -51,7 +51,7 @@ export async function proxy(request: NextRequest) {
         userRole = (decodedAccessToken.data as JwtPayload).role;
     }
 
-    if (accessToken && AUTH_ROUTES.includes("pathname")) {
+    if (accessToken && AUTH_ROUTES.includes(pathname)) {
         if (userRole === "USER") {
             return NextResponse.redirect(new URL("/dashboard", request.url))
         } else if (userRole === "ADMIN") {
