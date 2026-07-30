@@ -21,6 +21,7 @@ import { User, LogOut, Settings, HelpCircle, Menu } from 'lucide-react';
 import { logout } from '@/service/logout';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { NavbarProps } from '@/lib/types';
 
 // Navigation items configuration
 const navItems = [
