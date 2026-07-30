@@ -36,38 +36,10 @@ const navItems = [
 // User dropdown items configuration
 const userMenuItems = [
     { label: 'Profile', icon: User, id: 'profile' },
+    { label: 'Dashboard', icon: HelpCircle, id: 'dashboard' },
     { label: 'Settings', icon: Settings, id: 'settings' },
-    { label: 'Help', icon: HelpCircle, id: 'help' },
     { label: 'Logout', icon: LogOut, id: 'logout', isDanger: true },
 ];
-
-type IUser = {
-    success: boolean;
-    message: string;
-    data?: {
-        profile: {
-            name: string;
-            id: string;
-            email: string;
-            activeStatus: string;
-            role: string;
-            createdAt: string;
-            updatedAt: string;
-            profile: {
-                id: string;
-                profilePhoto: string | null;
-                bio: string | null;
-                userId: string;
-                createdAt: string;
-                updatedAt: string;
-            } | null;
-        }
-    }
-}
-
-type NavbarProps = {
-    user?: IUser | null;
-}
 
 export function Navbar({ user }: NavbarProps) {
     const [isOpen, setIsOpen] = useState(false);
@@ -88,10 +60,18 @@ export function Navbar({ user }: NavbarProps) {
             }
         } else if (actionId === "profile") {
             router.push("/dashboard/profile");
+        } else if (actionId === "dashboard") {
+
+            if (user.data?.profile.role === "USER") {
+                router.push("/dashboard");
+            } else if (user.data?.profile.role === "AUTHOR") {
+                router.push("/author-dashboard");
+            } else if (user.data?.profile.role === "ADMIN") {
+                router.push("/admin-dashboard");
+            }
+
         } else if (actionId === "settings") {
             toast.info("Settings page is under construction");
-        } else if (actionId === "help") {
-            toast.info("Help page is under construction");
         }
     };
 
