@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import { Button } from "@/components/ui/button";
@@ -9,8 +8,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { IPost } from "@/lib/types";
 import { PencilIcon, PlusIcon } from "lucide-react";
-import { useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { createPost, updatePost } from "../_actions/myPostsActions";
 
 type PostFormDialogProps = {
     mode: "create" | "edit";
@@ -19,20 +19,29 @@ type PostFormDialogProps = {
 
 export function PostFormDialog({ mode, post }: PostFormDialogProps) {
     const [open, setOpen] = useState(false);
-    const [pending, setPending] = useState(false);
+    // const [pending, setPending] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        setPending(true);
-        const toastId = toast.loading(mode === "edit" ? "Saving changes..." : "Creating post...");
-        
-        setTimeout(() => {
-            toast.dismiss(toastId);
-            toast.success(mode === "edit" ? "Post updated successfully (Mock Mode)!" : "Post created successfully (Mock Mode)!");
-            setPending(false);
-            setOpen(false);
-        }, 1200);
-    };
+    const action = mode === "edit" && post
+        ? updatePost.bind(null,post.id )
+        : createPost;
+
+    const [state, formAction, pending] = useActionState(action, null)
+
+    useEffect(() => {
+        if (!state) {
+            return
+        }
+
+        const message = (state as any).message as string | undefined
+
+        if (state.success) {
+            toast.success(message || (mode === "edit" ? "Post updated successfully" : "Post created successfully"))
+
+            setOpen(false)
+        } else {
+            toast.error(message || "Something went wrong")
+        }
+    }, [state, mode])
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -57,7 +66,9 @@ export function PostFormDialog({ mode, post }: PostFormDialogProps) {
                         {mode === "edit" ? "Edit Post" : "Create Post"}
                     </DialogTitle>
                 </DialogHeader>
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form 
+                action={formAction}
+                 className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor="title">Title</Label>
                         <Input id="title" name="title" defaultValue={post?.title} required />
